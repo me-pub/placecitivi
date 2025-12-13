@@ -32,38 +32,34 @@
         return document.getElementById(id);
     }
 
-    const viewer = $('viewer');
-    const viewerTitle = $('viewerTitle');
-    const viewerBody = $('viewerBody');
-    $('viewerClose').addEventListener('click', closeViewer);
-
-    function closeViewer() {
-        viewer.style.display = 'none';
-        viewerBody.innerHTML = '';
-    }
-
-    function openViewer(camera) {
-        viewerTitle.textContent = camera.name || 'Camera';
-        viewerBody.innerHTML = '';
-        viewer.style.display = 'block';
-
-        if (!camera.stream) {
-            viewerBody.innerHTML = `<div class=\"hint\">No stream configured for this camera.</div>`;
-            return;
-        }
-
+    function createStreamElement(stream) {
+        /** @type {any} */
         const video = document.createElement('video-stream');
-        video.background = true;
         video.style.height = '100%';
         video.style.width = '100%';
+        video.src = new URL('api/ws?src=' + encodeURIComponent(stream), location.href);
+        return video;
+    }
+
+    function stopStreamElement(video) {
+        if (!video) return;
         try {
-            // Avoid STUN delays on offline networks.
-            video.pcConfig.iceServers = [];
+            video.background = false;
         } catch (e) {
             // ignore
         }
-        video.src = new URL('api/ws?src=' + encodeURIComponent(camera.stream), location.href);
-        viewerBody.appendChild(video);
+        try {
+            if (typeof video.ondisconnect === 'function') {
+                video.ondisconnect();
+            }
+        } catch (e) {
+            // ignore
+        }
+        try {
+            video.remove();
+        } catch (e) {
+            // ignore
+        }
     }
 
     async function loadData() {
@@ -102,33 +98,57 @@
             if (!Number.isFinite(cam.lat) || !Number.isFinite(cam.lng)) continue;
             const marker = L.marker([cam.lat, wrapLng(cam.lng)]).addTo(map);
 
+            let popupVideo = null;
             const title = esc(cam.name || 'Camera');
             const desc = esc(cam.description || '');
             const streamHint = cam.stream ? `<div style=\"color:#666;font-size:12px\">stream: ${esc(cam.stream)}</div>` : '';
-            const popup = `
+
+            const popupRoot = document.createElement('div');
+            popupRoot.innerHTML = `
                 <div class=\"popup-title\">${title}</div>
                 ${desc ? `<div>${desc}</div>` : ''}
                 ${streamHint}
-                <div class=\"popup-actions\">
-                    <button class=\"btn\" data-action=\"view\">View</button>
-                    ${cam.stream ? `<a class=\"btn\" style=\"text-decoration:none;display:inline-block\" href=\"stream.html?src=${encodeURIComponent(cam.stream)}\">Open</a>` : ''}
-                </div>
+                ${cam.stream ? `
+                    <div class=\"popup-player\" data-role=\"player\"></div>
+                    <div class=\"popup-actions\">
+                        <a class=\"btn\" style=\"text-decoration:none;display:inline-block\" href=\"stream.html?src=${encodeURIComponent(cam.stream)}\">Open</a>
+                    </div>
+                ` : `<div class=\"hint\">No stream configured for this camera.</div>`}
             `;
-            marker.bindPopup(popup);
+
+            marker.bindPopup(popupRoot, {maxWidth: 420});
 
             marker.on('popupopen', (ev) => {
-                const el = ev.popup.getElement();
-                const btn = el && el.querySelector('[data-action=\"view\"]');
-                if (btn) btn.onclick = () => openViewer(cam);
+                const host = popupRoot.querySelector('[data-role=\"player\"]');
+                if (!host || !cam.stream) return;
+
+                const mount = () => {
+                    // popup might already be closed
+                    if (!host.isConnected) return;
+
+                    stopStreamElement(popupVideo);
+                    host.innerHTML = '';
+
+                    popupVideo = createStreamElement(cam.stream);
+                    host.appendChild(popupVideo);
+                };
+
+                if (customElements.get('video-stream')) {
+                    mount();
+                    return;
+                }
+
+                host.innerHTML = '<div class="hint">Loading player...</div>';
+                customElements.whenDefined('video-stream').then(mount).catch(() => {
+                    // ignore
+                });
             });
 
-            marker.on('dblclick', () => openViewer(cam));
+            marker.on('popupclose', () => {
+                stopStreamElement(popupVideo);
+                popupVideo = null;
+            });
         }
-
-        map.on('click', () => {
-            // clicking the map closes the viewer on mobile
-            if (window.innerWidth < 800) closeViewer();
-        });
     }
 
     (async () => {
