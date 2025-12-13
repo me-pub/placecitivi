@@ -11,6 +11,11 @@ import (
 )
 
 func apiStreams(w http.ResponseWriter, r *http.Request) {
+	if !api.IsAdminAuthenticated(r) {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	w = creds.SecretResponse(w)
 
 	query := r.URL.Query()
@@ -107,6 +112,11 @@ func apiStreams(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiStreamsDOT(w http.ResponseWriter, r *http.Request) {
+	if !api.IsAdminAuthenticated(r) {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	query := r.URL.Query()
 
 	dot := make([]byte, 0, 1024)

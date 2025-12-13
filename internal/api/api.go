@@ -42,6 +42,9 @@ func Init() {
 
 	// load config from YAML
 	app.LoadConfig(&cfg)
+	authUser = cfg.Mod.Username
+	authPass = cfg.Mod.Password
+	authLocalAuth = cfg.Mod.LocalAuth
 
 	if cfg.Mod.Listen == "" && cfg.Mod.UnixListen == "" && cfg.Mod.TLSListen == "" {
 		return
@@ -197,6 +200,12 @@ const StreamNotFound = "stream not found"
 var allowPaths []string
 var basePath string
 var log zerolog.Logger
+
+var (
+	authUser      string
+	authPass      string
+	authLocalAuth bool
+)
 
 func middlewareLog(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
