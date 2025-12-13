@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCTV Admin</title>
+    <link rel="stylesheet" href="cctv-admin.css">
+    <style>
+        header nav {
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="title">
+        <strong>CCTV Admin</strong>
+    </div>
+    <nav>
+        <a href="index.html">Map</a>
+        <a href="streams.html">Streams</a>
+    </nav>
+</header>
+
+<div class="login-wrap">
+    <div class="card">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label>Username</label>
+            <input id="loginUser" autocomplete="username" required>
+            <label>Password</label>
+            <input id="loginPass" type="password" autocomplete="current-password" required>
+            <div class="btnrow">
+                <button type="submit">Login</button>
+            </div>
+            <div class="status" id="loginStatus"></div>
+        </form>
+        <div class="muted" style="margin-top:10px">
+            Default credentials are <code>admin</code> / <code>admin</code> (change after first login).
+        </div>
+    </div>
+</div>
+
+<script src="cctv-admin-common.js"></script>
+<script src="cctv-admin-login.js"></script>
+</body>
+</html>
+

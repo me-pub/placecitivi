@@ -8,6 +8,7 @@ import (
 	"github.com/AlexxIT/go2rtc/internal/api/ws"
 	"github.com/AlexxIT/go2rtc/internal/app"
 	"github.com/AlexxIT/go2rtc/internal/bubble"
+	"github.com/AlexxIT/go2rtc/internal/cctv"
 	"github.com/AlexxIT/go2rtc/internal/debug"
 	"github.com/AlexxIT/go2rtc/internal/doorbird"
 	"github.com/AlexxIT/go2rtc/internal/dvrip"
@@ -104,6 +105,7 @@ func main() {
 		{"ngrok", ngrok.Init},
 		{"pinggy", pinggy.Init},
 		{"srtp", srtp.Init},
+		{"cctv", cctv.Init},
 	}
 
 	for _, m := range modules {

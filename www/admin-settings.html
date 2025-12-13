@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCTV Admin - Settings</title>
+    <link rel="stylesheet" href="cctv-admin.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <style>
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="title">
+        <strong>CCTV Admin</strong>
+        <span class="muted" id="whoami"></span>
+    </div>
+    <nav>
+        <a href="admin-cameras.html">Cameras</a>
+        <a href="admin-settings.html">Settings</a>
+        <a href="admin-user.html">User</a>
+        <a href="admin-backup.html">Backup</a>
+        <a href="index.html">Map</a>
+        <a href="streams.html">Streams</a>
+        <button id="logoutBtn" class="danger" type="button">Logout</button>
+    </nav>
+</header>
+
+<div class="wrap">
+    <div class="panel">
+        <div class="card">
+            <h2>Map & Branding</h2>
+
+            <label>Corporate Name</label>
+            <input id="corpName">
+
+            <label>Corporate Logo</label>
+            <input id="corpLogo" type="file" accept="image/*">
+            <div class="muted" style="margin-top:6px">Stored in the database as an embedded data URL.</div>
+
+            <label>Tile URL</label>
+            <input id="tileURL" placeholder="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png">
+
+            <label>Tile Attribution</label>
+            <input id="tileAttr" placeholder="&copy; OpenStreetMap contributors">
+
+            <div class="row">
+                <div>
+                    <label>Center Lat</label>
+                    <input id="centerLat" type="number" step="0.000001">
+                </div>
+                <div>
+                    <label>Center Lng</label>
+                    <input id="centerLng" type="number" step="0.000001">
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Zoom</label>
+                    <input id="zoom" type="number" step="1" min="0" max="22">
+                </div>
+                <div style="display:flex;align-items:flex-end">
+                    <button id="useMapView" type="button" style="width:100%">Use current map view</button>
+                </div>
+            </div>
+
+            <div class="btnrow">
+                <button id="saveSettings" type="button">Save Settings</button>
+            </div>
+            <div class="status" id="settingsStatus"></div>
+        </div>
+    </div>
+    <div class="content">
+        <div id="map"></div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="cctv-admin-common.js"></script>
+<script src="cctv-admin-settings.js"></script>
+</body>
+</html>
+

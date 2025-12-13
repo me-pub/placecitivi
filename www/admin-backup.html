@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCTV Admin - Backup</title>
+    <link rel="stylesheet" href="cctv-admin.css">
+</head>
+<body>
+<header>
+    <div class="title">
+        <strong>CCTV Admin</strong>
+        <span class="muted" id="whoami"></span>
+    </div>
+    <nav>
+        <a href="admin-cameras.html">Cameras</a>
+        <a href="admin-settings.html">Settings</a>
+        <a href="admin-user.html">User</a>
+        <a href="admin-backup.html">Backup</a>
+        <a href="index.html">Map</a>
+        <a href="streams.html">Streams</a>
+        <button id="logoutBtn" class="danger" type="button">Logout</button>
+    </nav>
+</header>
+
+<div class="login-wrap">
+    <div class="card">
+        <h2>Backup & Restore</h2>
+        <div class="muted">Export/import a JSON backup of settings and cameras.</div>
+
+        <div class="btnrow" style="margin-top:12px">
+            <button id="exportBtn" type="button">Export JSON</button>
+        </div>
+
+        <label style="margin-top:14px">Import JSON</label>
+        <input id="importFile" type="file" accept="application/json">
+        <div class="btnrow">
+            <button id="importBtn" type="button">Import</button>
+        </div>
+
+        <div class="status" id="backupStatus"></div>
+    </div>
+</div>
+
+<script src="cctv-admin-common.js"></script>
+<script src="cctv-admin-backup.js"></script>
+</body>
+</html>
+

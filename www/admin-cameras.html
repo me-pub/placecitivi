@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCTV Admin - Cameras</title>
+    <link rel="stylesheet" href="cctv-admin.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <style>
+        #map {
+            height: 100%;
+        }
+
+        .tableWrap {
+            max-height: 320px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="title">
+        <strong>CCTV Admin</strong>
+        <span class="muted" id="whoami"></span>
+    </div>
+    <nav>
+        <a href="admin-cameras.html">Cameras</a>
+        <a href="admin-settings.html">Settings</a>
+        <a href="admin-user.html">User</a>
+        <a href="admin-backup.html">Backup</a>
+        <a href="index.html">Map</a>
+        <a href="streams.html">Streams</a>
+        <button id="logoutBtn" class="danger" type="button">Logout</button>
+    </nav>
+</header>
+
+<div class="wrap">
+    <div class="panel">
+        <div class="card">
+            <h2>Camera</h2>
+            <div class="muted">Tip: click the map to set location for a new camera; click a marker to edit; drag marker to change location.</div>
+
+            <div class="btnrow">
+                <button id="addCam" type="button">Add New</button>
+                <button id="cancelEdit" type="button" style="display:none">Cancel</button>
+            </div>
+
+            <label>Name</label>
+            <input id="camName">
+
+            <label>Description</label>
+            <textarea id="camDesc"></textarea>
+
+            <label>Stream Name</label>
+            <input id="camStream" placeholder="e.g. frontdoor (leave empty to auto-generate when URL is set)">
+
+            <label>Camera URL</label>
+            <input id="camURL" placeholder="e.g. rtsp://user:pass@ip/stream">
+            <div class="muted" style="margin-top:6px">If URL is set, go2rtc stream will be created/updated under the Stream Name.</div>
+
+            <div class="row">
+                <div>
+                    <label>Lat</label>
+                    <input id="camLat" type="number" step="0.000001">
+                </div>
+                <div>
+                    <label>Lng</label>
+                    <input id="camLng" type="number" step="0.000001">
+                </div>
+            </div>
+
+            <div class="btnrow">
+                <button id="saveCam" type="button">Save</button>
+                <button id="viewCam" type="button" style="display:none">View</button>
+                <button id="deleteCam" class="danger" type="button" style="display:none">Delete</button>
+            </div>
+
+            <div class="status" id="camStatus"></div>
+        </div>
+
+        <div class="card">
+            <h2>List</h2>
+            <div class="tableWrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th class="muted">Stream</th>
+                    </tr>
+                    </thead>
+                    <tbody id="camTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div id="map"></div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="cctv-admin-common.js"></script>
+<script src="cctv-admin-cameras.js"></script>
+</body>
+</html>
+
