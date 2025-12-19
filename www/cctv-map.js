@@ -72,6 +72,8 @@
         const name = settings.corporate_name || DEFAULTS.corporate_name;
         $('corpName').textContent = name;
         document.title = name;
+        const tag = $('corpTag');
+        if (tag) tag.textContent = 'Live Map';
 
         const logo = settings.corporate_logo || '';
         const img = $('corpLogo');

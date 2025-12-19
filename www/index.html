@@ -4,23 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CCTV Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     <style>
         :root {
-            --header-height: 48px;
-            --bg: #0b0c10;
-            --fg: #f4f5f7;
-            --muted: #aeb3bd;
-            --card: rgba(20, 22, 28, 0.92);
+            --header-height: 64px;
+            --bg: #0b0d10;
+            --fg: #f7f3ea;
+            --muted: #a6a19a;
+            --card: rgba(20, 24, 32, 0.88);
             --border: rgba(255, 255, 255, 0.08);
         }
 
         html, body {
             height: 100%;
             margin: 0;
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            background: var(--bg);
+            font-family: "Space Grotesk", "Segoe UI", sans-serif;
+            background: radial-gradient(circle at 15% 15%, #1b2230, var(--bg));
             color: var(--fg);
         }
 
@@ -29,42 +32,73 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 12px;
+            padding: 0 18px;
             border-bottom: 1px solid var(--border);
-            background: #0f1117;
+            background: linear-gradient(120deg, #111823, #0c1016 55%, #0b0d10);
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             min-width: 0;
         }
 
         .brand img {
-            height: 28px;
+            height: 34px;
             width: auto;
             display: none;
+            border-radius: 8px;
         }
 
-        .brand .name {
-            font-weight: 650;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .brand-title {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-title strong {
+            font-size: 18px;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .brand-title span {
+            font-family: "Space Mono", monospace;
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         nav a {
             color: var(--fg);
             text-decoration: none;
-            opacity: 0.92;
-            margin-left: 10px;
-            font-size: 14px;
+            font-size: 13px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+            padding: 6px 10px;
+            border-radius: 999px;
+            transition: all 0.2s ease;
         }
 
         nav a:hover {
-            opacity: 1;
-            text-decoration: underline;
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        nav a.active {
+            background: rgba(255, 191, 95, 0.16);
+            border-color: rgba(255, 191, 95, 0.4);
+            color: #ffdb9a;
         }
 
         #map {
@@ -165,6 +199,21 @@
         .btn:hover {
             filter: brightness(1.08);
         }
+
+        @media (max-width: 900px) {
+            header {
+                height: auto;
+                padding: 12px 14px;
+                gap: 10px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
@@ -173,11 +222,15 @@
 <header>
     <div class="brand">
         <img id="corpLogo" alt="logo">
-        <div class="name" id="corpName">CCTV Map</div>
+        <div class="brand-title">
+            <strong id="corpName">CCTV Map</strong>
+            <span id="corpTag">Live Map</span>
+        </div>
     </div>
     <nav>
+        <a class="active" href="index.html">Map</a>
+        <a href="grid.html">Grid</a>
         <a href="admin.html">Admin</a>
-        <a href="streams.html">Streams</a>
     </nav>
 </header>
 
