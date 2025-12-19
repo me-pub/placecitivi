@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  placecitivi:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: placecitivi
+    ports:
+      - "1984:1984"     # Web UI & API
+      - "8554:8554"     # RTSP server
+      - "8555:8555/tcp" # WebRTC TCP
+      - "8555:8555/udp" # WebRTC UDP
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Jakarta
+    volumes:
+      - ./config:/config
+    # Health check to ensure the service is running
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1984/api"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
