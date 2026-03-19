@@ -29,21 +29,21 @@
         <div class="muted">Export/import a JSON backup of settings and cameras.</div>
 
         <div class="btnrow" style="margin-top:12px">
-            <button id="exportBtn" type="button">Export JSON</button>
+            <button id="exportBtn" class="primary" type="button">Export JSON</button>
         </div>
 
-        <label style="margin-top:14px">Import JSON</label>
+        <label for="importFile" style="margin-top:14px">Import JSON</label>
         <input id="importFile" type="file" accept="application/json">
         <div class="btnrow">
-            <button id="importBtn" type="button">Import</button>
+            <button id="importBtn" class="secondary" type="button">Import</button>
         </div>
 
         <div class="status" id="backupStatus"></div>
     </div>
 </div>
 
+<script src="map-theme.js"></script>
 <script src="cctv-admin-common.js"></script>
 <script src="cctv-admin-backup.js"></script>
 </body>
 </html>
-

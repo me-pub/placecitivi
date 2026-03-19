@@ -42,37 +42,37 @@
             <div class="muted">Tip: click the map to set location for a new camera; click a marker to edit; drag marker to change location.</div>
 
             <div class="btnrow">
-                <button id="addCam" type="button">Add New</button>
-                <button id="cancelEdit" type="button" style="display:none">Cancel</button>
+                <button id="addCam" class="primary" type="button">Add New</button>
+                <button id="cancelEdit" class="secondary" type="button" style="display:none">Cancel</button>
             </div>
 
-            <label>Name</label>
-            <input id="camName">
+            <label for="camName">Name</label>
+            <input id="camName" name="camName">
 
-            <label>Description</label>
-            <textarea id="camDesc"></textarea>
+            <label for="camDesc">Description</label>
+            <textarea id="camDesc" name="camDesc"></textarea>
 
-            <label>Stream Name</label>
-            <input id="camStream" placeholder="e.g. frontdoor (leave empty to auto-generate when URL is set)">
+            <label for="camStream">Stream Name</label>
+            <input id="camStream" name="camStream" placeholder="e.g. frontdoor (leave empty to auto-generate when URL is set)">
 
-            <label>Camera URL</label>
-            <input id="camURL" placeholder="e.g. rtsp://user:pass@ip/stream">
+            <label for="camURL">Camera URL</label>
+            <input id="camURL" name="camURL" placeholder="e.g. rtsp://user:pass@ip/stream">
             <div class="muted" style="margin-top:6px">If URL is set, go2rtc stream will be created/updated under the Stream Name.</div>
 
             <div class="row">
                 <div>
-                    <label>Lat</label>
-                    <input id="camLat" type="number" step="0.000001">
+                    <label for="camLat">Lat</label>
+                    <input id="camLat" name="camLat" type="number" step="0.000001">
                 </div>
                 <div>
-                    <label>Lng</label>
-                    <input id="camLng" type="number" step="0.000001">
+                    <label for="camLng">Lng</label>
+                    <input id="camLng" name="camLng" type="number" step="0.000001">
                 </div>
             </div>
 
             <div class="btnrow">
-                <button id="saveCam" type="button">Save</button>
-                <button id="viewCam" type="button" style="display:none">View</button>
+                <button id="saveCam" class="primary" type="button">Save</button>
+                <button id="viewCam" class="secondary" type="button" style="display:none">View</button>
                 <button id="deleteCam" class="danger" type="button" style="display:none">Delete</button>
             </div>
 
@@ -101,8 +101,8 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="map-theme.js"></script>
 <script src="cctv-admin-common.js"></script>
 <script src="cctv-admin-cameras.js"></script>
 </body>
 </html>
-

@@ -26,12 +26,12 @@
     <div class="card">
         <h2>Login</h2>
         <form id="loginForm">
-            <label>Username</label>
-            <input id="loginUser" autocomplete="username" required>
-            <label>Password</label>
-            <input id="loginPass" type="password" autocomplete="current-password" required>
+            <label for="loginUser">Username</label>
+            <input id="loginUser" name="username" autocomplete="username" required>
+            <label for="loginPass">Password</label>
+            <input id="loginPass" name="password" type="password" autocomplete="current-password" required>
             <div class="btnrow">
-                <button type="submit">Login</button>
+                <button class="primary" type="submit">Login</button>
             </div>
             <div class="status" id="loginStatus"></div>
         </form>
@@ -41,8 +41,8 @@
     </div>
 </div>
 
+<script src="map-theme.js"></script>
 <script src="cctv-admin-common.js"></script>
 <script src="cctv-admin-login.js"></script>
 </body>
 </html>
-

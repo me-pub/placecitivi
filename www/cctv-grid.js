@@ -63,9 +63,10 @@
 
     function applyBranding(settings) {
         const name = settings.corporate_name || DEFAULTS.corporate_name;
-        $('corpName').textContent = 'GRID';
-        $('corpTag').textContent = name;
-        document.title = 'GRID';
+        $('corpName').textContent = name;
+        const tag = $('corpTag');
+        if (tag) tag.textContent = 'CCTV Wall';
+        document.title = name;
 
         const logo = settings.corporate_logo || '';
         const img = $('corpLogo');

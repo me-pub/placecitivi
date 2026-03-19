@@ -3,48 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>go2rtc</title>
+    <title>Streams - go2rtc</title>
+    <link rel="stylesheet" href="cctv-theme.css">
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        .page-stack {
+            display: grid;
+            gap: 16px;
+        }
+
         .controls {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 10px 12px;
             align-items: center;
         }
 
-        .info {
-            color: #888;
+        .controls > button {
+            min-width: 108px;
         }
+
+        .controls label {
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ink);
+        }
+
+        .controls input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        .table-shell {
+            overflow: auto;
+        }
+
+        .table-shell table {
+            min-width: 720px;
+        }
+
+        .info {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
     </style>
 </head>
 <body>
-
 <script src="main.js"></script>
 
-<main>
-    <div class="controls">
-        <button>stream</button>
-        modes
-        <label><input type="checkbox" name="webrtc" checked>webrtc</label>
-        <label><input type="checkbox" name="mse" checked>mse</label>
-        <label><input type="checkbox" name="hls" checked>hls</label>
-        <label><input type="checkbox" name="mjpeg" checked>mjpeg</label>
-        <span style="margin-left:auto"></span>
-        <a href="index.html">CCTV map</a>
-        <a style="margin-left:10px" href="admin.html">Admin</a>
-    </div>
-    <table>
-        <thead>
-        <tr>
-            <th><label><input id="selectall" type="checkbox">name</label></th>
-            <th>online</th>
-            <th>commands</th>
-        </tr>
-        </thead>
-        <tbody id="streams">
-        </tbody>
-    </table>
-    <div class="info"></div>
+<main class="page-stack">
+    <section class="surface">
+        <div class="controls">
+            <button class="primary" type="button">Open selected</button>
+            <label><input type="checkbox" name="webrtc" checked>webrtc</label>
+            <label><input type="checkbox" name="mse" checked>mse</label>
+            <label><input type="checkbox" name="hls" checked>hls</label>
+            <label><input type="checkbox" name="mjpeg" checked>mjpeg</label>
+        </div>
+        <div class="table-shell">
+            <table>
+                <thead>
+                <tr>
+                    <th><label><input id="selectall" type="checkbox">name</label></th>
+                    <th>online</th>
+                    <th>commands</th>
+                </tr>
+                </thead>
+                <tbody id="streams"></tbody>
+            </table>
+        </div>
+    </section>
 </main>
 
 <script>
@@ -67,7 +109,6 @@
 
             let mode = document.querySelectorAll('.controls input');
             mode = Array.from(mode).filter(i => i.checked).map(i => i.name).join(',');
-
             window.location.href = `${url}&mode=${mode}`;
         });
 
@@ -113,7 +154,7 @@
             const fetchedIds = [];
 
             for (const [key, value] of Object.entries(data)) {
-                const name = key.replace(/[<">]/g, ''); // sanitize
+                const name = key.replace(/[<">]/g, '');
                 fetchedIds.push(name);
 
                 let tr = tbody.querySelector(`tr[data-id="${name}"]`);
@@ -134,7 +175,6 @@
                     `<td>${links}</td>`;
             }
 
-            // Remove old rows
             existingIds.forEach(id => {
                 if (!fetchedIds.includes(id)) {
                     const trToRemove = tbody.querySelector(`tr[data-id="${id}"]`);
@@ -144,18 +184,10 @@
         });
     }
 
-    // Auto-reload
     setInterval(reload, 1000);
-
-    const url = new URL('api', location.href);
-    fetch(url, {cache: 'no-cache'}).then(r => r.json()).then(data => {
-        const info = document.querySelector('.info');
-        info.innerText = `version: ${data.version} / config: ${data.config_path}`;
-    });
 
     reload();
 </script>
 
 </body>
 </html>
-

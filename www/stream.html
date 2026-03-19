@@ -1,38 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="apple-touch-icon" href="https://alexxit.github.io/go2rtc/icons/apple-touch-icon-180x180.png" sizes="180x180">
-    <link rel="icon" href="https://alexxit.github.io/go2rtc/icons/favicon.ico">
-    <link rel="manifest" href="https://alexxit.github.io/go2rtc/manifest.json">
     <title>stream - go2rtc</title>
+    <link rel="stylesheet" href="cctv-theme.css">
     <style>
         body {
-            background: black;
-            margin: 0;
-            padding: 0;
             display: flex;
-            font-family: Arial, Helvetica, sans-serif;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        html, body {
-            height: 100%;
-            width: 100%;
+        main {
+            flex: 1 1 auto;
+            min-height: 0;
         }
 
-        .flex {
-            flex-wrap: wrap;
-            align-content: flex-start;
-            align-items: flex-start;
+        .player-card {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        .stream-rack {
+            min-height: 0;
+        }
+
+        .stream-rack video-stream {
+            min-height: 240px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #1a1410;
         }
     </style>
 </head>
 <body>
+<script src="main.js"></script>
 <script type="module" src="./video-stream.js"></script>
+<main class="player-shell">
+    <section class="card player-card">
+        <div id="rack" class="stream-rack"></div>
+    </section>
+</main>
 <script type="module">
     const params = new URLSearchParams(location.search);
 
-    // support multiple streams and multiple modes
     const streams = params.getAll('src');
     const modes = params.getAll('mode');
     if (modes.length === 0) modes.push('');
@@ -44,12 +56,13 @@
         modes.push(modes[0]);
     }
 
-    if (streams.length > 1) {
-        document.body.className = 'flex';
-    }
-
     const background = params.get('background') !== 'false';
     const width = '1 0 ' + (params.get('width') || '320px');
+    const rack = document.getElementById('rack');
+
+    if (streams.length > 1) {
+        rack.classList.add('multi');
+    }
 
     for (let i = 0; i < streams.length; i++) {
         /** @type {VideoStream} */
@@ -58,7 +71,7 @@
         video.mode = modes[i] || video.mode;
         video.style.flex = width;
         video.src = new URL('api/ws?src=' + encodeURIComponent(streams[i]), location.href);
-        document.body.appendChild(video);
+        rack.appendChild(video);
     }
 
     document.title = streams.join('/') + ' - go2rtc';

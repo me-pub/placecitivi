@@ -62,7 +62,12 @@
         document.querySelectorAll('header nav a').forEach(a => {
             if (!href) return;
             const same = a.getAttribute('href') === href;
-            if (same) a.classList.add('active');
+            a.classList.toggle('active', same);
+            if (same) {
+                a.setAttribute('aria-current', 'page');
+            } else {
+                a.removeAttribute('aria-current');
+            }
         });
     }
 
@@ -83,4 +88,3 @@
         bindLogoutButton,
     };
 })();
-

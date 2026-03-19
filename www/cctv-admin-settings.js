@@ -16,6 +16,20 @@
     let settings = null;
     let pendingLogoDataURL = '';
 
+    function resolveTileSettings(s) {
+        const fallbackURL = s.tile_url || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const fallbackAttr = s.tile_attribution || '&copy; OpenStreetMap contributors';
+        const api = window.CCTVMapTheme;
+        const override = api && typeof api.getThemeOverride === 'function'
+            ? api.getThemeOverride()
+            : null;
+        if (!override) return {tileURL: fallbackURL, tileAttr: fallbackAttr};
+        return {
+            tileURL: override.tile_url || fallbackURL,
+            tileAttr: override.tile_attribution || fallbackAttr,
+        };
+    }
+
     function ensureMap() {
         if (map) return;
         map = L.map('map', {zoomControl: true, worldCopyJump: true});
@@ -30,14 +44,13 @@
         const zoom = Number.isFinite(settings.zoom) ? settings.zoom : 2;
         map.setView(center, zoom);
 
-        const tileURL = settings.tile_url || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-        const tileAttr = settings.tile_attribution || '&copy; OpenStreetMap contributors';
+        const t = resolveTileSettings(settings);
 
         if (tile) {
             try { map.removeLayer(tile); } catch (e) {}
             tile = null;
         }
-        tile = L.tileLayer(tileURL, {attribution: tileAttr, maxZoom: 22});
+        tile = L.tileLayer(t.tileURL, {attribution: t.tileAttr, maxZoom: 22});
         tile.addTo(map);
     }
 
@@ -113,6 +126,6 @@
 
         ensureMap();
         await refresh();
+        window.addEventListener('cctv-map-theme-change', applySettingsToMap);
     })();
 })();
-

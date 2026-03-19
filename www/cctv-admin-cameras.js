@@ -20,6 +20,20 @@
     let cameras = [];
     let edit = {mode: 'none', id: null};
 
+    function resolveTileSettings(s) {
+        const fallbackURL = s.tile_url || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const fallbackAttr = s.tile_attribution || '&copy; OpenStreetMap contributors';
+        const api = window.CCTVMapTheme;
+        const override = api && typeof api.getThemeOverride === 'function'
+            ? api.getThemeOverride()
+            : null;
+        if (!override) return {tileURL: fallbackURL, tileAttr: fallbackAttr};
+        return {
+            tileURL: override.tile_url || fallbackURL,
+            tileAttr: override.tile_attribution || fallbackAttr,
+        };
+    }
+
     function clearEdit() {
         edit = {mode: 'none', id: null};
         $('cancelEdit').style.display = 'none';
@@ -93,14 +107,13 @@
         const zoom = Number.isFinite(settings.zoom) ? settings.zoom : 2;
         map.setView(center, zoom);
 
-        const tileURL = settings.tile_url || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-        const tileAttr = settings.tile_attribution || '&copy; OpenStreetMap contributors';
+        const t = resolveTileSettings(settings);
 
         if (tile) {
             try { map.removeLayer(tile); } catch (e) {}
             tile = null;
         }
-        tile = L.tileLayer(tileURL, {attribution: tileAttr, maxZoom: 22});
+        tile = L.tileLayer(t.tileURL, {attribution: t.tileAttr, maxZoom: 22});
         tile.addTo(map);
     }
 
@@ -142,12 +155,22 @@
         for (const cam of cameras) {
             const tr = document.createElement('tr');
             tr.style.cursor = 'pointer';
+            tr.tabIndex = 0;
+            tr.setAttribute('role', 'button');
+            tr.setAttribute('aria-label', 'Edit camera ' + (cam.name || 'camera'));
             tr.innerHTML = `<td>${cam.name || ''}</td><td class="muted">${cam.stream || ''}</td>`;
-            tr.onclick = () => {
+            const selectCamera = () => {
                 map.setView([cam.lat, wrapLng(cam.lng)], Math.max(map.getZoom(), 14));
                 loadForm(cam);
                 setStatus($('camStatus'), 'Editing: drag marker to move, then Save.', '');
             };
+            tr.addEventListener('click', selectCamera);
+            tr.addEventListener('keydown', ev => {
+                if (ev.key === 'Enter' || ev.key === ' ') {
+                    ev.preventDefault();
+                    selectCamera();
+                }
+            });
             tbody.appendChild(tr);
         }
     }
@@ -240,6 +263,6 @@
 
         ensureMap();
         await refreshAll();
+        window.addEventListener('cctv-map-theme-change', applySettingsToMap);
     })();
 })();
-

@@ -4,10 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>config - go2rtc</title>
+    <link rel="stylesheet" href="cctv-theme.css">
     <script src="https://unpkg.com/ace-builds@1.33.1/src-min/ace.js"></script>
     <style>
-        html, body, #config {
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .editor-card {
+            flex: 1 1 auto;
+            min-height: 0;
+            padding: 16px;
+        }
+
+        #config {
             height: 100%;
+            min-height: 64vh;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: rgba(255, 250, 244, 0.82);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
         }
     </style>
 </head>
@@ -16,11 +47,15 @@
 <script src="main.js"></script>
 
 <main>
-    <div>
-        <button id="save">Save & Restart</button>
-    </div>
+    <section class="card">
+        <div class="toolbar">
+            <button id="save" class="primary" type="button">Save & Restart</button>
+        </div>
+    </section>
+    <section class="surface editor-card">
+        <div id="config" aria-label="Configuration editor"></div>
+    </section>
 </main>
-<div id="config"></div>
 
 <script>
     /* global ace */
@@ -53,7 +88,7 @@
         if (r.status === 410) {
             alert('Config file is not set');
         } else if (r.status === 404) {
-            editor.setValue(''); // config file not exist
+            editor.setValue('');
         } else if (r.ok) {
             dump = await r.text();
             editor.setValue(dump);

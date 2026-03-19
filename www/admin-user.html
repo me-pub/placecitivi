@@ -28,14 +28,14 @@
         <h2>Admin Account</h2>
         <div class="muted">Change username and/or password for the admin account.</div>
 
-        <label>New Username (optional)</label>
-        <input id="newUser" autocomplete="username">
+        <label for="newUser">New Username (optional)</label>
+        <input id="newUser" name="newUser" autocomplete="username">
 
-        <label>New Password (optional)</label>
-        <input id="newPass" type="password" autocomplete="new-password">
+        <label for="newPass">New Password (optional)</label>
+        <input id="newPass" name="newPass" type="password" autocomplete="new-password">
 
         <div class="btnrow">
-            <button id="saveUser" type="button">Update Account</button>
+            <button id="saveUser" class="primary" type="button">Update Account</button>
         </div>
 
         <div class="status" id="userStatus"></div>
@@ -45,8 +45,8 @@
     </div>
 </div>
 
+<script src="map-theme.js"></script>
 <script src="cctv-admin-common.js"></script>
 <script src="cctv-admin-user.js"></script>
 </body>
 </html>
-

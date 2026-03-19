@@ -4,10 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>net - go2rtc</title>
+    <link rel="stylesheet" href="cctv-theme.css">
     <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
     <style>
-        html, body, #network {
-            height: 100%;
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        .network-card {
+            flex: 1 1 auto;
+            min-height: 0;
+            padding: 16px;
+        }
+
+        #network {
+            min-height: 68vh;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: rgba(255, 250, 244, 0.82);
         }
     </style>
 </head>
@@ -15,7 +37,11 @@
 
 <script src="main.js"></script>
 
-<div id="network"></div>
+<main class="player-shell">
+    <section class="surface network-card">
+        <div id="network"></div>
+    </section>
+</main>
 
 <script>
     /* global vis */

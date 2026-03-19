@@ -5,16 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>links - go2rtc</title>
     <style>
-        div > li {
-            list-style-type: none;
-            padding-left: 10px;
-            position: relative;
+        .link-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 10px;
         }
 
-        div > li:before {
-            content: "-";
-            position: absolute;
-            left: 0;
+        .link-list > li {
+            list-style-type: none;
+            padding: 12px 14px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            background: rgba(255, 250, 244, 0.78);
+        }
+
+        .link-list > li h2 {
+            margin: 0 0 8px;
+            font-family: 'Sora', 'IBM Plex Sans', sans-serif;
+            font-size: 20px;
+            letter-spacing: -0.03em;
+        }
+
+        .link-list > li + li {
+            margin-top: 0;
         }
     </style>
 </head>
@@ -23,9 +38,10 @@
 <script src="main.js"></script>
 
 <main>
-    <div id="links"></div>
+    <ul id="links" class="link-list"></ul>
     <script>
-        const src = new URLSearchParams(location.search).get('src').replace(/[<">]/g, ''); // sanitize
+        const srcParam = new URLSearchParams(location.search).get('src') || '';
+        const src = srcParam.replace(/[<">]/g, ''); // sanitize
 
         const links = document.getElementById('links');
 

@@ -32,6 +32,22 @@
         return document.getElementById(id);
     }
 
+    function resolveTileSettings(settings) {
+        const fallbackURL = settings.tile_url || DEFAULTS.tile_url;
+        const fallbackAttr = settings.tile_attribution || DEFAULTS.tile_attribution;
+        const api = window.CCTVMapTheme;
+        const override = api && typeof api.getThemeOverride === 'function'
+            ? api.getThemeOverride()
+            : null;
+        if (!override) {
+            return {tileURL: fallbackURL, tileAttr: fallbackAttr};
+        }
+        return {
+            tileURL: override.tile_url || fallbackURL,
+            tileAttr: override.tile_attribution || fallbackAttr,
+        };
+    }
+
     function createStreamElement(stream) {
         /** @type {any} */
         const video = document.createElement('video-stream');
@@ -92,9 +108,17 @@
 
         const map = L.map('map', {zoomControl: true, worldCopyJump: true}).setView([centerLat, centerLng], zoom);
 
-        const tileURL = settings.tile_url || DEFAULTS.tile_url;
-        const tileAttr = settings.tile_attribution || DEFAULTS.tile_attribution;
-        L.tileLayer(tileURL, {attribution: tileAttr, maxZoom: 22}).addTo(map);
+        let tile = null;
+        const applyTiles = () => {
+            const t = resolveTileSettings(settings);
+            if (tile) {
+                try { map.removeLayer(tile); } catch (e) {}
+                tile = null;
+            }
+            tile = L.tileLayer(t.tileURL, {attribution: t.tileAttr, maxZoom: 22}).addTo(map);
+        };
+        applyTiles();
+        window.addEventListener('cctv-map-theme-change', applyTiles);
 
         for (const cam of cameras || []) {
             if (!Number.isFinite(cam.lat) || !Number.isFinite(cam.lng)) continue;
@@ -118,7 +142,7 @@
                 ` : `<div class=\"hint\">No stream configured for this camera.</div>`}
             `;
 
-            marker.bindPopup(popupRoot, {maxWidth: 420});
+            marker.bindPopup(popupRoot, {maxWidth: 760});
 
             marker.on('popupopen', (ev) => {
                 const host = popupRoot.querySelector('[data-role=\"player\"]');

@@ -1,24 +1,54 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>hls - go2rtc</title>
+    <link rel="stylesheet" href="cctv-theme.css">
     <style>
         body {
-            background-color: black;
-            margin: 0;
-            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        html, body, video {
-            height: 100%;
+        main {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        .player-card {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        .video-stage {
+            flex: 1 1 auto;
+            min-height: 68vh;
+            border-radius: 24px;
+            overflow: hidden;
+            background: #1a1410;
+            border: 1px solid rgba(80, 57, 42, 0.12);
+        }
+
+        .video-stage video {
             width: 100%;
+            height: 100%;
         }
     </style>
 </head>
 <body>
+<script src="main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
-<video id="video" autoplay controls playsinline muted></video>
+
+<main class="player-shell">
+    <section class="card player-card">
+        <div class="video-stage">
+            <video id="video" autoplay controls playsinline muted></video>
+        </div>
+    </section>
+</main>
+
 <script>
     // http://192.168.1.123:1984/hls.html?src=demo&mp4
     const url = new URL('api/stream.m3u8' + location.search, location.href);

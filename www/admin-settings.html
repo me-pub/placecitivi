@@ -35,42 +35,42 @@
         <div class="card">
             <h2>Map & Branding</h2>
 
-            <label>Corporate Name</label>
-            <input id="corpName">
+            <label for="corpName">Corporate Name</label>
+            <input id="corpName" name="corpName">
 
-            <label>Corporate Logo</label>
+            <label for="corpLogo">Corporate Logo</label>
             <input id="corpLogo" type="file" accept="image/*">
             <div class="muted" style="margin-top:6px">Stored in the database as an embedded data URL.</div>
 
-            <label>Tile URL</label>
-            <input id="tileURL" placeholder="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png">
+            <label for="tileURL">Tile URL</label>
+            <input id="tileURL" name="tileURL" placeholder="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png">
 
-            <label>Tile Attribution</label>
-            <input id="tileAttr" placeholder="&copy; OpenStreetMap contributors">
+            <label for="tileAttr">Tile Attribution</label>
+            <input id="tileAttr" name="tileAttr" placeholder="&copy; OpenStreetMap contributors">
 
             <div class="row">
                 <div>
-                    <label>Center Lat</label>
-                    <input id="centerLat" type="number" step="0.000001">
+                    <label for="centerLat">Center Lat</label>
+                    <input id="centerLat" name="centerLat" type="number" step="0.000001">
                 </div>
                 <div>
-                    <label>Center Lng</label>
-                    <input id="centerLng" type="number" step="0.000001">
+                    <label for="centerLng">Center Lng</label>
+                    <input id="centerLng" name="centerLng" type="number" step="0.000001">
                 </div>
             </div>
 
             <div class="row">
                 <div>
-                    <label>Zoom</label>
-                    <input id="zoom" type="number" step="1" min="0" max="22">
+                    <label for="zoom">Zoom</label>
+                    <input id="zoom" name="zoom" type="number" step="1" min="0" max="22">
                 </div>
                 <div style="display:flex;align-items:flex-end">
-                    <button id="useMapView" type="button" style="width:100%">Use current map view</button>
+                    <button id="useMapView" class="secondary" type="button" style="width:100%">Use current map view</button>
                 </div>
             </div>
 
             <div class="btnrow">
-                <button id="saveSettings" type="button">Save Settings</button>
+                <button id="saveSettings" class="primary" type="button">Save Settings</button>
             </div>
             <div class="status" id="settingsStatus"></div>
         </div>
@@ -82,8 +82,8 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="map-theme.js"></script>
 <script src="cctv-admin-common.js"></script>
 <script src="cctv-admin-settings.js"></script>
 </body>
 </html>
-
